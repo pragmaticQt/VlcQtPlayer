@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ItemDragger.qml</file>
+        <file>ItemResizer.qml</file>
+        <file>MusicPlayer.qml</file>
+    </qresource>
+</RCC>
