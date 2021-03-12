@@ -49,6 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.12
+import QtQml 2.15
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
@@ -403,8 +404,19 @@ ApplicationWindow {
                 id: seekSlider
                 from: 0
                 to: Math.floor(videoPlayer.length / 1000)
-                value: videoPlayer.time / 1000
-                //                to: 261
+
+                Binding on value{
+                    delayed: true
+                    restoreMode: Binding.RestoreNone
+                    when: !seekSlider.pressed
+                    value: videoPlayer.time / 1000
+                }
+
+                onPressedChanged: {
+                    if (!pressed) {
+                        videoPlayer.position = seekSlider.position
+                    }
+                }
 
                 Layout.fillWidth: true
 
