@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>ItemDragger.qml</file>
-        <file>ItemResizer.qml</file>
+        <file>FramelessWindowDragger.qml</file>
+        <file>FramelessWindowResizer.qml</file>
         <file>MusicPlayer.qml</file>
+        <file>FramelessWindowHelper.qml</file>
     </qresource>
 </RCC>

@@ -14,9 +14,12 @@ RESOURCES += \
 
 RC_ICONS = music.ico
 
+INCLUDEPATH += "C:/Program Files/VLC-Qt/include"
+LIBS += -L"C:/Program Files/VLC-Qt/lib" -lVLCQtCore -lVLCQtQml
+
+QML_IMPORT_PATH += "C:/Program Files/VLC-Qt/qml"
+
 target.path = $$[QT_INSTALL_EXAMPLES]/quickcontrols2/imagine/musicplayer
 INSTALLS += target
 
-DISTFILES += \
-    ItemDragger.qml \
-    ItemResizer.qml
+DISTFILES +=

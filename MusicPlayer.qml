@@ -52,13 +52,21 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
+import VLCQt 1.0
 
 ApplicationWindow {
     id: window
+    //    maximumWidth: 1600
+    //    maximumHeight: 900
+
+    //    minimumWidth: 800
+    //    minimumHeight: 450
+
     width: 1280
     height: 720
+
     visible: true
-    title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
+    //    title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
 
     flags: Qt.Window | Qt.WindowStaysOnTopHint | Qt.CustomizeWindowHint  | Qt.FramelessWindowHint
 
@@ -67,13 +75,13 @@ ApplicationWindow {
         y = Screen.height / 2 - height / 2
     }
 
-    ItemDragger {
+    FramelessWindowDragger {
         target: window
     }
 
-    ItemResizer {
-        target: window
-    }
+    //    FramelessWindowResizer {
+    //        target: window
+    //    }
 
     Shortcut {
         sequence: "Ctrl+Q"
@@ -137,6 +145,7 @@ ApplicationWindow {
         ColumnLayout {
             spacing: 0
             Layout.preferredWidth: 230
+            visible: false
 
             RowLayout {
                 Layout.maximumHeight: 170
@@ -217,12 +226,17 @@ ApplicationWindow {
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                Image {
+                VlcVideoPlayer {
+                    id: videoPlayer
                     anchors.fill: parent
-                    fillMode: Image.PreserveAspectCrop
-                    source: "images/album-cover.jpg"
+                    url: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
+                    property url lastUrl: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
                 }
+                //                Image {
+                //                    anchors.fill: parent
+                //                    fillMode: Image.PreserveAspectCrop
+                //                    source: "images/album-cover.jpg"
+                //                }
             }
 
             Item {
@@ -345,6 +359,10 @@ ApplicationWindow {
                     icon.name: "stop"
                     icon.width: 32
                     icon.height: 32
+                    onClicked: {
+                        videoPlayer.stop()
+                        //                        videoPlayer.url = "";
+                    }
                 }
                 RoundButton {
                     icon.name: "previous"
@@ -352,9 +370,17 @@ ApplicationWindow {
                     icon.height: 32
                 }
                 RoundButton {
-                    icon.name: "pause"
-                    icon.width: 32
-                    icon.height: 32
+                    icon.name: videoPlayer.state === 3 ? "pause" : "play"
+                    icon.width: 48
+                    icon.height: 48
+                    onClicked: {
+                        if (videoPlayer.state === 3)
+                            videoPlayer.pause()
+                        else if (videoPlayer.state === 4)
+                            videoPlayer.play()
+                        else
+                            videoPlayer.url = videoPlayer.lastUrl
+                    }
                 }
                 RoundButton {
                     icon.name: "next"
@@ -375,24 +401,40 @@ ApplicationWindow {
 
             Slider {
                 id: seekSlider
-                value: 113
-                to: 261
+                from: 0
+                to: Math.floor(videoPlayer.length / 1000)
+                value: videoPlayer.time / 1000
+                //                to: 261
 
                 Layout.fillWidth: true
+
+                function pad(number) {
+                    if (number <= 9)
+                        return "0" + number;
+                    return number;
+                }
+
+                Label {
+                    id: label
+
+                    x: (seekSlider.width - width) * .5
+                    y: seekSlider.height
+                    visible: true//seekSlider.pressed
+                    text: curTime + "/" + totalTime
+
+                    readonly property string curTime: seekSlider.pad(Math.floor(seekSlider.value / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.value % 60))
+                    readonly property string totalTime: seekSlider.pad(Math.floor(seekSlider.to / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.to % 60))
+
+                }
 
                 ToolTip {
                     parent: seekSlider.handle
                     visible: seekSlider.pressed
-                    text: pad(Math.floor(value / 60)) + ":" + pad(Math.floor(value % 60))
+                    text: seekSlider.pad(Math.floor(seekSlider.value / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.value % 60))
                     y: parent.height
 
-                    readonly property int value: seekSlider.valueAt(seekSlider.position)
+//                    readonly property int value: seekSlider.value//seekSlider.valueAt(seekSlider.position)
 
-                    function pad(number) {
-                        if (number <= 9)
-                            return "0" + number;
-                        return number;
-                    }
                 }
             }
         }
@@ -400,7 +442,7 @@ ApplicationWindow {
         ColumnLayout {
             spacing: 16
             Layout.preferredWidth: 230
-
+            visible: false
             ButtonGroup {
                 buttons: libraryRowLayout.children
             }
@@ -448,10 +490,10 @@ ApplicationWindow {
                         Component.onCompleted: {
                             for (var i = 0; i < 100; ++i) {
                                 append({
-                                   author: "Author",
-                                   album: "Album",
-                                   track: "Track 0" + (i % 9 + 1),
-                                });
+                                           author: "Author",
+                                           album: "Album",
+                                           track: "Track 0" + (i % 9 + 1),
+                                       });
                             }
                         }
                     }

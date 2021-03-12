@@ -50,8 +50,11 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtQuick/QQuickView>
 #include <QSettings>
 #include <QIcon>
+#include <VLCQtCore/Common.h>
+#include <VLCQtQml/QmlVideoPlayer.h>
 
 int main(int argc, char *argv[])
 {
@@ -61,10 +64,13 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QGuiApplication app(argc, argv);
+    VlcCommon::setPluginPath("C:/Program Files/VLC-Qt/bin/plugins");
+    VlcQmlVideoPlayer::registerPlugin();
 
     QIcon::setThemeName("musicplayer");
 
     QQmlApplicationEngine engine;
+
     engine.load(QUrl("qrc:/MusicPlayer.qml"));
     if (engine.rootObjects().isEmpty())
         return -1;

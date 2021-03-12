@@ -36,5 +36,7 @@
         <file>musicplayer/32x32@2/stop.png</file>
         <file>musicplayer/32x32/favorite.png</file>
         <file>musicplayer/32x32@2/favorite.png</file>
+        <file>musicplayer/32x32/play.png</file>
+        <file>musicplayer/32x32@2/play.png</file>
     </qresource>
 </RCC>
