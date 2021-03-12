@@ -414,27 +414,22 @@ ApplicationWindow {
                     return number;
                 }
 
-                Label {
-                    id: label
+                readonly property string curTime: pad(Math.floor(value / 60)) + ":" + pad(Math.floor(value % 60))
+                readonly property string totalTime: pad(Math.floor(to / 60)) + ":" + pad(Math.floor(to % 60))
+                readonly property string sliderTime: pad(Math.floor(value / 60)) + ":" + pad(Math.floor(value % 60))
 
+                Label {
                     x: (seekSlider.width - width) * .5
                     y: seekSlider.height
                     visible: true//seekSlider.pressed
-                    text: curTime + "/" + totalTime
-
-                    readonly property string curTime: seekSlider.pad(Math.floor(seekSlider.value / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.value % 60))
-                    readonly property string totalTime: seekSlider.pad(Math.floor(seekSlider.to / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.to % 60))
-
+                    text: seekSlider.curTime + "/" + seekSlider.totalTime
                 }
 
                 ToolTip {
                     parent: seekSlider.handle
                     visible: seekSlider.pressed
-                    text: seekSlider.pad(Math.floor(seekSlider.value / 60)) + ":" + seekSlider.pad(Math.floor(seekSlider.value % 60))
+                    text: seekSlider.sliderTime
                     y: parent.height
-
-//                    readonly property int value: seekSlider.value//seekSlider.valueAt(seekSlider.position)
-
                 }
             }
         }
