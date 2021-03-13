@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 FramelessWindowHelper {
-    anchors.fill: parent
+//    anchors.fill: parent
 
     onPressed: {
         previousX = mouseX

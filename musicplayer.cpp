@@ -58,8 +58,8 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setApplicationName("Music Player");
-    QGuiApplication::setOrganizationName("QtProject");
+    QGuiApplication::setApplicationName("VLC_Player");
+    QGuiApplication::setOrganizationName("VLC_Player");
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    engine.load(QUrl("qrc:/MusicPlayer.qml"));
+    engine.load(QUrl("qrc:/Player.qml"));
     if (engine.rootObjects().isEmpty())
         return -1;
 

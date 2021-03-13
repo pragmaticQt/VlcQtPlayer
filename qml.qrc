@@ -2,7 +2,9 @@
     <qresource prefix="/">
         <file>FramelessWindowDragger.qml</file>
         <file>FramelessWindowResizer.qml</file>
-        <file>MusicPlayer.qml</file>
+        <file>Player.qml</file>
         <file>FramelessWindowHelper.qml</file>
+        <file>PlayerSlider.qml</file>
+        <file>PlayerSliderMarker.qml</file>
     </qresource>
 </RCC>

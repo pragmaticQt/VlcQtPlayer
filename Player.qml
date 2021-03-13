@@ -48,41 +48,50 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQml 2.15
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
+import QtQuick.Controls.Material 2.12
 import VLCQt 1.0
 
 ApplicationWindow {
     id: window
-    //    maximumWidth: 1600
-    //    maximumHeight: 900
-
-    //    minimumWidth: 800
-    //    minimumHeight: 450
 
     width: 1280
     height: 720
 
     visible: true
-    //    title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
 
-    flags: Qt.Window | Qt.WindowStaysOnTopHint | Qt.CustomizeWindowHint  | Qt.FramelessWindowHint
+    flags: Qt.Window| Qt.CustomizeWindowHint  | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 
-    Component.onCompleted: {
-        x = Screen.width / 2 - width / 2
-        y = Screen.height / 2 - height / 2
-    }
+    //    Component.onCompleted: {
+    //        x = Screen.width / 2 - width / 2
+    //        y = Screen.height / 2 - height / 2
+    //    }
+
 
     FramelessWindowDragger {
-        target: window
-    }
+        id: dragger
 
-    //    FramelessWindowResizer {
-    //        target: window
-    //    }
+        anchors.fill: window.contentItem
+
+        target: window
+
+        ParentAnimation {
+            NumberAnimation {
+                target: window
+                property: "x"
+                duration: 30
+            }
+            NumberAnimation {
+                target: window
+                property: "y"
+                duration: 30
+            }
+        }
+    }
 
     Shortcut {
         sequence: "Ctrl+Q"
@@ -90,6 +99,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+        id: toolbar
         RowLayout {
             id: headerRowLayout
             anchors.fill: parent
@@ -132,112 +142,35 @@ ApplicationWindow {
     }
 
     Label {
-        text: "Qtify"
-        font.pixelSize: Qt.application.font.pixelSize * 1.3
+        text: "VLC视频播放器(Qt)2.0"
+        //        Material.foreground: Material.Grey
+        font.bold: true
+        font.pixelSize: Qt.application.font.pixelSize * 2
         anchors.centerIn: header
         z: header.z + 1
     }
 
     RowLayout {
-        spacing: 115
         anchors.fill: parent
-        anchors.margins: 70
+        anchors.leftMargin: 4
+        anchors.rightMargin: 4
 
         ColumnLayout {
-            spacing: 0
-            Layout.preferredWidth: 230
-            visible: false
-
-            RowLayout {
-                Layout.maximumHeight: 170
-
-                ColumnLayout {
-                    Label {
-                        text: "12 dB"
-                        Layout.fillHeight: true
-                    }
-                    Label {
-                        text: "6 dB"
-                        Layout.fillHeight: true
-                    }
-                    Label {
-                        text: "0 dB"
-                        Layout.fillHeight: true
-                    }
-                    Label {
-                        text: "-6 dB"
-                        Layout.fillHeight: true
-                    }
-                    Label {
-                        text: "-12 dB"
-                        Layout.fillHeight: true
-                    }
-                }
-
-                Repeater {
-                    model: 7
-
-                    Slider {
-                        value: Math.random()
-                        orientation: Qt.Vertical
-
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
-                }
-            }
-
-            RowLayout {
-                spacing: 10
-                Layout.topMargin: 23
-
-                ComboBox {
-                    currentIndex: 1
-                    model: ["Blues", "Classical", "Jazz", "Metal"]
-                    Layout.fillWidth: true
-                }
-
-                Button {
-                    icon.name: "folder"
-                }
-
-                Button {
-                    icon.name: "save"
-                    enabled: false
-                }
-            }
-
-            Dial {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 50
-            }
-
-            Label {
-                text: "Volume"
-
-                Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 12
-            }
-        }
-
-        ColumnLayout {
-            spacing: 26
+            //            spacing: 26
             Layout.preferredWidth: 230
 
-            Item {
+            Rectangle {
+                color: "black"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
                 VlcVideoPlayer {
                     id: videoPlayer
                     anchors.fill: parent
                     url: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
                     property url lastUrl: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
                 }
-                //                Image {
-                //                    anchors.fill: parent
-                //                    fillMode: Image.PreserveAspectCrop
-                //                    source: "images/album-cover.jpg"
-                //                }
+
             }
 
             Item {
@@ -323,7 +256,8 @@ ApplicationWindow {
 
                 Label {
                     id: songNameLabel
-                    text: "Edvard Grieg - In the Hall of the Mountain King"
+                    //                    text: "Edvard Grieg - In the Hall of the Mountain King"
+                    text: "《叶问4：完结篇》"
                     font.pixelSize: Qt.application.font.pixelSize * 1.4
                 }
 
@@ -362,7 +296,6 @@ ApplicationWindow {
                     icon.height: 32
                     onClicked: {
                         videoPlayer.stop()
-                        //                        videoPlayer.url = "";
                     }
                 }
                 RoundButton {
@@ -371,6 +304,7 @@ ApplicationWindow {
                     icon.height: 32
                 }
                 RoundButton {
+                    Material.elevation: 6
                     icon.name: videoPlayer.state === 3 ? "pause" : "play"
                     icon.width: 48
                     icon.height: 48
@@ -400,10 +334,48 @@ ApplicationWindow {
                 }
             }
 
+
+
             Slider {
                 id: seekSlider
                 from: 0
                 to: Math.floor(videoPlayer.length / 1000)
+
+                CheckBox {
+                    id: checkBox
+                    checkable: true
+                    checked: true
+                    text: "显示章节"
+                    anchors.right: parent.right
+                    anchors.bottom: parent.verticalCenter
+                }
+
+                PlayerSliderMarker {
+                    id: sliderMarker
+                    visible: checkBox.checked
+                    markersModel: ListModel {
+                        ListElement {
+                            title: "第一章 我是个练武之人"
+                            begin: .01
+                            end: .18
+                        }
+                        ListElement {
+                            title: "第二章 佛山无影掌"
+                            begin: .20
+                            end: .5
+                        }
+
+                        ListElement {
+                            title: "第三章 我要打十个"
+                            begin: .6
+                            end: .99
+                        }
+                    }
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    //        anchors.verticalCenterOffset: -10
+                }
 
                 Binding on value{
                     delayed: true
@@ -432,7 +404,7 @@ ApplicationWindow {
 
                 Label {
                     x: (seekSlider.width - width) * .5
-                    y: seekSlider.height
+                    y: 0
                     visible: true//seekSlider.pressed
                     text: seekSlider.curTime + "/" + seekSlider.totalTime
                 }
@@ -446,82 +418,6 @@ ApplicationWindow {
             }
         }
 
-        ColumnLayout {
-            spacing: 16
-            Layout.preferredWidth: 230
-            visible: false
-            ButtonGroup {
-                buttons: libraryRowLayout.children
-            }
-
-            RowLayout {
-                id: libraryRowLayout
-                Layout.alignment: Qt.AlignHCenter
-
-                Button {
-                    text: "Files"
-                    checked: true
-                }
-                Button {
-                    text: "Playlists"
-                    checkable: true
-                }
-                Button {
-                    text: "Favourites"
-                    checkable: true
-                }
-            }
-
-            RowLayout {
-                TextField {
-                    Layout.fillWidth: true
-                }
-                Button {
-                    icon.name: "folder"
-                }
-            }
-
-            Frame {
-                id: filesFrame
-                leftPadding: 1
-                rightPadding: 1
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                ListView {
-                    id: filesListView
-                    clip: true
-                    anchors.fill: parent
-                    model: ListModel {
-                        Component.onCompleted: {
-                            for (var i = 0; i < 100; ++i) {
-                                append({
-                                           author: "Author",
-                                           album: "Album",
-                                           track: "Track 0" + (i % 9 + 1),
-                                       });
-                            }
-                        }
-                    }
-                    delegate: ItemDelegate {
-                        text: model.author + " - " + model.album + " - " + model.track
-                        width: filesListView.width
-                    }
-
-                    ScrollBar.vertical: ScrollBar {
-                        parent: filesFrame
-                        policy: ScrollBar.AlwaysOn
-                        anchors.top: parent.top
-                        anchors.topMargin: filesFrame.topPadding
-                        anchors.right: parent.right
-                        anchors.rightMargin: 1
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: filesFrame.bottomPadding
-                    }
-                }
-            }
-        }
     }
 }
 
