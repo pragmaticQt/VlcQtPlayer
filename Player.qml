@@ -71,7 +71,6 @@ ApplicationWindow {
     //        y = Screen.height / 2 - height / 2
     //    }
 
-
     FramelessWindowDragger {
         id: dragger
 
@@ -83,12 +82,12 @@ ApplicationWindow {
             NumberAnimation {
                 target: window
                 property: "x"
-//                duration: 30
+                //                duration: 30
             }
             NumberAnimation {
                 target: window
                 property: "y"
-//                duration: 30
+                //                duration: 30
             }
         }
     }
@@ -384,14 +383,14 @@ ApplicationWindow {
                     NumberAnimation {}
                 }
 
-                Binding on value {
-                    when: !pressed
-                    value: videoPlayer.time / 1000
-                }
+                value: videoPlayer.time / 1000
 
                 onPressedChanged: {
                     if (!pressed) {
                         videoPlayer.position = seekSlider.position
+                        videoPlayer.play()
+                    } else {
+                        videoPlayer.pause()
                     }
                 }
 

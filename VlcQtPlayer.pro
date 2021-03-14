@@ -1,9 +1,9 @@
 TEMPLATE = app
-TARGET = musicplayer
+TARGET = VlcQtPlayer
 QT += quick quickcontrols2
 
 SOURCES += \
-    musicplayer.cpp
+    VlcQtPlayer.cpp
 
 RESOURCES += \
     icons/icons.qrc \
@@ -12,7 +12,7 @@ RESOURCES += \
     qml.qrc \
     qtquickcontrols2.conf
 
-RC_ICONS = music.ico
+RC_ICONS = app.ico
 
 INCLUDEPATH += "C:/Program Files/VLC-Qt/include"
 LIBS += -L"C:/Program Files/VLC-Qt/lib" -lVLCQtCore -lVLCQtQml
