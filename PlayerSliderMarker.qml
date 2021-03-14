@@ -25,7 +25,7 @@ Control {
         }
     }
 
-    signal clickPos(real position)
+    signal posClicked(real logicPos/* 0.0 to 1.0 */)
 
     implicitWidth: 600
     implicitHeight: 60
@@ -38,6 +38,7 @@ Control {
                 required property real begin
                 required property real end
                 required property string title
+
                 Rectangle {
                     id: leftMarker
                     x: control.leftPadding + begin * (control.availableWidth - width)
@@ -55,6 +56,7 @@ Control {
                     propagateComposedEvents: true
                     onClicked: {
                         console.log("SliderMarker: "+mouse.x+","+mouse.y)
+                        control.posClicked(begin)
                         mouse.accepted = false
                     }
                 }

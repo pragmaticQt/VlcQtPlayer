@@ -83,12 +83,12 @@ ApplicationWindow {
             NumberAnimation {
                 target: window
                 property: "x"
-                duration: 30
+//                duration: 30
             }
             NumberAnimation {
                 target: window
                 property: "y"
-                duration: 30
+//                duration: 30
             }
         }
     }
@@ -167,7 +167,7 @@ ApplicationWindow {
                 VlcVideoPlayer {
                     id: videoPlayer
                     anchors.fill: parent
-                    url: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
+                    url: "http://vfx.mtime.cn/Video/2019/03/14/mp4/190314224955123234.mp4"
                     property url lastUrl: "http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"
                 }
 
@@ -334,8 +334,6 @@ ApplicationWindow {
                 }
             }
 
-
-
             Slider {
                 id: seekSlider
                 from: 0
@@ -352,24 +350,29 @@ ApplicationWindow {
 
                 PlayerSliderMarker {
                     id: sliderMarker
+
+                    onPosClicked: videoPlayer.position = logicPos
+
                     visible: checkBox.checked
                     markersModel: ListModel {
                         ListElement {
-                            title: "第一章 我是个练武之人"
-                            begin: .01
+                            title: "第一章 我是钢铁侠"
+                            begin: .05
                             end: .18
                         }
+
                         ListElement {
-                            title: "第二章 佛山无影掌"
+                            title: "第二章 集结"
                             begin: .20
                             end: .5
                         }
 
                         ListElement {
-                            title: "第三章 我要打十个"
+                            title: "第三章 不惜代价"
                             begin: .6
-                            end: .99
+                            end: .8
                         }
+
                     }
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -377,10 +380,12 @@ ApplicationWindow {
                     //        anchors.verticalCenterOffset: -10
                 }
 
-                Binding on value{
-                    delayed: true
-                    restoreMode: Binding.RestoreNone
-                    when: !seekSlider.pressed
+                Behavior on value {
+                    NumberAnimation {}
+                }
+
+                Binding on value {
+                    when: !pressed
                     value: videoPlayer.time / 1000
                 }
 
